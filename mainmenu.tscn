@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://bf88svfy3qt0l"]
+
+[ext_resource type="Script" path="res://SceneLoader.gd" id="1_hap7d"]
+
+[node name="Mainmenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hap7d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 309.0
+offset_right = 1149.0
+offset_bottom = 622.0
+alignment = 1
+
+[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Single Player"
+
+[node name="Versus" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Versus"
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"

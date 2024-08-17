@@ -3,7 +3,8 @@ extends Control
 #label to tell back to the character
 @onready var result_label = $Label
 @onready var WordCheckFile = "res://words_alpha.txt"
-@onready var File
+@onready var timer = $Timer
+
 var is_player1_turn = true
 var player1Score = 0
 var player2Score = 0
@@ -11,37 +12,61 @@ var player2Score = 0
 var player1scores = []
 var player2scores = []
 
+func _ready() -> void:
+	timer.wait_time = 5.0
+	timer.one_shot = false
+	timer.start()
 
-
-# Function to check if a word is in the text file
-func is_word_in_file(word: String) -> bool:
-	var file = File.new()
-	if file.file_exists(WordCheckFile):
-		file.open(WordCheckFile, File.READ)
-		# Read the entire file as text
-		var file_content = file.get_as_text()
-		# Convert to lowercase for case-insensitive search
-		file_content = file_content.to_lower()
-		word = word.to_lower()
-		file.close()
-		# Check if the word exists in the file
-		return word in file_content
+func check_string_in_file(input_string: String, file_path: String) -> bool:
+	var file = FileAccess.open((WordCheckFile), FileAccess.READ)
+	var file_content = file.get_as_text()
+	file.close()
+	if input_string in file_content:
+		return true
 	else:
-		print("File not found!")
-		return false
-
+		print("word does not exist")
+	return false
 
 func _on_text_submitted(new_text: String) -> void:
-	# Count the characters in the entered text4
-	var char_count = new_text.length()
+	timer.stop()
+	if check_string_in_file(new_text, WordCheckFile):
+		var char_count = new_text.length()
+		if is_player1_turn:
+			player1Score += char_count
+			result_label.text = "Player 1 Score: " + str(player1Score)
+			player1scores.append(player1Score)
+		else:
+			player2Score += char_count
+			result_label.text = "Player 2 Score: " + str(player2Score)
+			player2scores.append(player2Score)
+			player1Score = 0
+			player2Score = 0
+	else:
+		if(is_player1_turn):
+			player1Score = 0
+			player1scores.append(player1Score)
+		else:
+			player2Score = 0
+			player2scores.append(player2Score)
+	is_player1_turn = not is_player1_turn
+	start_new_turn()
+	print(player1scores)
+	print(player2scores)
+	
+	
+func start_new_turn() -> void:
+	timer.start()  # Start the timer for the next player's turn
+	#print(player1scores)
+	#print(player2scores)
+#	result_label.text = "It's " + (if is_player1_turn then "Player 1" else "Player 2") + "'s turn!"
+
+func _on_Timer_timeout() -> void:
+	# This function is called when the timer runs out
 	if is_player1_turn:
-		player1Score += char_count
-		result_label.text = "Player 1 Score: " + str(player1Score)
+		player1Score = 0
 		player1scores.append(player1Score)
 	else:
-		player2Score += char_count
-		result_label.text = "Player 2 Score: " + str(player2Score)
-		player2scores.append(player2Score)
-		player1Score = 0
 		player2Score = 0
+		player2scores.append(player2Score)
 	is_player1_turn = not is_player1_turn
+	start_new_turn()
