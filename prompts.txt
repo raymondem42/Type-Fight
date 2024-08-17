@@ -1,0 +1,22 @@
+A word without the Letter E
+A word without the Letter A
+A word that starts with Y
+A Word with 2 of the same letter in it
+The longest palindrome you can think of (read the same forward and backwards)
+A word that contain all five vowels (a, e, i, o, u)
+A word that start and end with the same letter
+A word that end in X
+A word that has exactly 2 vowels
+A word that end in "ing"
+A word that has exactly 2 vowels
+A word that contain the letter J
+A word that start with Ch 
+A word that has "th" in it
+A word that has y in the middle of the word
+A word that has no vowels
+Any Country
+Any animal (spaces allowed)
+Any element from the periodic table
+Any food (spaces allowed)
+Any animal that starts with the letter E (Spaces allowed)
+Any animal that starts with the letter O (Spaces allowed)
