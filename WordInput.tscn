@@ -25,3 +25,4 @@ offset_bottom = 130.0
 [node name="Timer" type="Timer" parent="LineEdit"]
 
 [connection signal="text_submitted" from="LineEdit" to="LineEdit" method="_on_text_submitted"]
+[connection signal="timeout" from="LineEdit/Timer" to="LineEdit" method="_on_timer_timeout"]
