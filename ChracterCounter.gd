@@ -330,6 +330,8 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			announce_round_winner()  # End the round and announce the winner
 			
 		text_input.editable =false # disables after valid word submission
+		#disable the enter key
+		
 	else:
 		#  input is invalidallow retry
 		result_label.text = "Invalid word! Try again"

@@ -1,12 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://wt2v21gt8u5"]
+[gd_scene load_steps=9 format=3 uid="uid://wt2v21gt8u5"]
 
 [ext_resource type="ArrayMesh" uid="uid://bs8n588tbhk6y" path="res://Island03.obj" id="1_uvqsy"]
+[ext_resource type="PackedScene" uid="uid://c5qmq18y0x3rt" path="res://WordInput.tscn" id="2_t5gcl"]
+[ext_resource type="Texture2D" uid="uid://btcajir0tvimh" path="res://rainbow_up.png" id="3_155b0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wpet6"]
 albedo_color = Color(0.291554, 0.0950458, 0.00697745, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nnpp3"]
-albedo_color = Color(0, 0.246822, 0.0277558, 1)
+albedo_color = Color(8.66354e-07, 0.430139, 0.0761411, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_e73t2"]
+panorama = ExtResource("3_155b0")
+
+[sub_resource type="Sky" id="Sky_7hc01"]
+sky_material = SubResource("PanoramaSkyMaterial_e73t2")
+
+[sub_resource type="Environment" id="Environment_m7o0q"]
+background_mode = 2
+background_energy_multiplier = 1.94
+sky = SubResource("Sky_7hc01")
+ambient_light_source = 3
+ambient_light_color = Color(8.66354e-07, 0.596559, 0.758849, 1)
+reflected_light_source = 2
 
 [node name="BattleField" type="Node3D"]
 
@@ -14,3 +30,29 @@ albedo_color = Color(0, 0.246822, 0.0277558, 1)
 mesh = ExtResource("1_uvqsy")
 surface_material_override/0 = SubResource("StandardMaterial3D_wpet6")
 surface_material_override/1 = SubResource("StandardMaterial3D_nnpp3")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.144903, -0.400933, 0.904575, -0.0140521, 0.914965, 0.403288, -0.989346, 0.0457262, -0.138215, 1.22761, 1.67668, -0.215912)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" parent="CanvasLayer" instance=ExtResource("2_t5gcl")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.30374, 0)
+light_energy = 4.151
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 1.69
+light_size = 1.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.08976, 0)
+light_energy = 2.608
+light_indirect_energy = 1.225
+light_volumetric_fog_energy = 1.33
+light_size = 1.0
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_m7o0q")
