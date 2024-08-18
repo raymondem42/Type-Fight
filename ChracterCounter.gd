@@ -1,6 +1,6 @@
 extends Control
 
-#label to tell back to the character
+
 @onready var result_label = $Label
 @onready var WordCheckFile = "res://words_alpha.txt"
 @onready var AnimalCheckFile = "res://animals.txt"
@@ -11,6 +11,9 @@ extends Control
 
 
 @onready var timer = $Timer
+@onready var countdown_label = $CountdownLabel  # A label to display the countdown timer
+@onready var text_input =  $LineEdit #user enter words
+
 @onready var timerCheck = true
 
 var is_player1_turn = true
@@ -302,15 +305,28 @@ func _on_text_submitted(new_text: String) -> void:
 		print(char_count)
 		if is_player1_turn:
 			player1Score += char_count
-			result_label.text = "Player 1 Score: " + str(player1Score)
 			player1scores.append(player1Score)
+			result_label.text = "Player 1 scored " + str(char_count) + " points."
+			result_label.text += "\nPlayer 2's turn next. Press Space to start."
+			timer.stop() #will stop timer only if word is valid
+			end_turn()
 		else:
 			player2Score += char_count
-			result_label.text = "Player 2 Score: " + str(player2Score)
 			player2scores.append(player2Score)
-			player1Score = 0
-			player2Score = 0
+			result_label.text = "Player 2 scored " + str(char_count) + " points."
+			countdown_running = false #stops countdown
+			timer.stop()
+			announce_round_winner()  # End the round and announce the winner
 	else:
+		#  input is invalidallow retry
+		result_label.text = "Invalid word! Try again"
+		text_input.clear() #clears the input for retry
+		text_input.grab_focus()
+		
+func end_turn() -> void:
+	
+	text_input.clear()
+	text_input.editable = false #this will disable inputs
 		if(is_player1_turn):
 			player1Score = 0
 			player1scores.append(player1Score)
@@ -319,6 +335,11 @@ func _on_text_submitted(new_text: String) -> void:
 			player2scores.append(player2Score)
 			
 	is_player1_turn = not is_player1_turn
+	round_ready = true #next round is a go
+	countdown_running = false #countdonw not running
+	timer.stop() 
+	
+	# The next turn will start when the player press space 
 	#start_new_turn()
 	print(player1scores)
 	print(player2scores)
@@ -335,12 +356,75 @@ func _on_Timer_timeout():
 	timer.stop()
 	# This function is called when the timer runs out
 	if is_player1_turn:
-		player1Score = 0
-		player1scores.append(player1Score)
+			player1Score = 0
+			player1scores.append(player1Score)
+			result_label.text = "Time's up! Player 1's score: " + str(player1Score)
 	else:
 		player2Score = 0
 		player2scores.append(player2Score)
+		result_label.text = "Time's up! Player 2's score: " + str(player2Score)
+	
+	result_label.text += "\nRound over! Next player's turn. Press Space to start."
+	print("Round is done.")
+	
+	# manually start the next round
 	is_player1_turn = not is_player1_turn
+	round_ready = true #change to show next round is ready to start
+	
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.is_pressed() and event.keycode == KEY_SPACE:
+		if round_ready:
+			start_new_turn()
+			
+func announce_round_winner() -> void:
+	#announce winner of round with pts for both
+	result_label.text = "Round " + str(current_round) + " results:\n"
+	result_label.text += "Player 1: " + str(player1Score) + " points\n"
+	result_label.text += "Player 2: " + str(player2Score) + " points\n"
+	
+	
+	# Announce the winner of the round
+	if player1Score > player2Score:
+		result_label.text += "\nPlayer 1 wins this round!"
+	elif player2Score > player1Score:
+		result_label.text += "\nPlayer 2 wins this round!"
+	else:
+		result_label.text += "\nThis round is a tie!"
+	
+	# Prepare for the next round or end the game
+	current_round += 1
+	if current_round > total_rounds:
+		announce_final_winner()
+	else:
+		if current_round == total_rounds:
+			result_label.text += "\nPress Space to start the Final Round!"
+		else:
+			result_label.text += "\nPress Space to start Round " + str(current_round) + "."
+		round_ready = true  # Set to true so the player can start the next round
+		
+func announce_final_winner() -> void:
+	# Calculate the total points for each player
+	var player1_total_points = player1Score
+	var player2_total_points = player2Score
+	
+	# Announce the overall winner after the last round
+	result_label.text = "Final results:\n"
+	result_label.text += "Player 1: " + str(player1_total_points) + " points\n"
+	result_label.text += "Player 2: " + str(player2_total_points) + " points\n"
+	
+	if player1_total_points > player2_total_points:
+		result_label.text += "Player 1 WINS!"
+	elif player2_total_points > player1_total_points:
+		result_label.text += "Player 2 WINS!" 
+	else:
+		result_label.text += "The game is a tie with both players scoring " + str(player1_total_points) + " points!"
+
+	# Optionally, reset the game or exit
+
+func reset_scores() -> void:
+	# Reset scores for the next round
+	player1Score = 0
+	player2Score = 0
 	
 
 	#start_new_turn()
