@@ -54,17 +54,13 @@ func check_string_in_file(input_string: String, file_path: String) -> bool:
 	var file = FileAccess.open((file_path), FileAccess.READ)
 	while not file.eof_reached():
 		var line = file.get_line().strip_edges().to_lower()
-		#print(line)
-		# Check if the current line matches the input string
 		if line == input_string:
 			file.close()
 			return true
-	
 	return false
 
 
 #checking to see if things match
-
 func has_two_of_same_letter(new_text: String) -> bool:
 	var letter_counts = {}
 	# Count occurrences of each letter
