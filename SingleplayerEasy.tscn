@@ -7,6 +7,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="."]
+layout_mode = 0
 offset_left = 320.0
 offset_top = 530.0
 offset_right = 837.0
@@ -15,12 +16,14 @@ offset_bottom = 590.0
 [node name="Timer" type="Timer" parent="."]
 
 [node name="CountdownLabel" type="Label" parent="."]
+layout_mode = 0
 offset_left = 558.0
 offset_top = 420.0
 offset_right = 598.0
 offset_bottom = 443.0
 
 [node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 0
 offset_left = 320.0
 offset_top = 460.0
 offset_right = 835.0

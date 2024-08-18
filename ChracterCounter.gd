@@ -339,8 +339,8 @@ func end_turn() -> void:
 	text_input.clear()
 	text_input.editable = false #this will disable inputs
 	#if(is_player1_turn):
-	player1scores.append(player1Score)
-	player1Score = 0
+	#player1scores.append(player1Score)
+	#player1Score = 0
 	#else:
 	#player2Score = 0
 	#player2scores.append(player2Score)
@@ -437,7 +437,8 @@ func announce_round_winner() -> void:
 	is_player1_turn = true
 	
 	player2scores.append(player2Score)
-	player2Score = 0
+	#player2Score = 0
+	
 	
 	random_index = randi() % 55
 	pick_random_prompt()
