@@ -328,12 +328,15 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			countdown_running = false #stops countdown
 			timer.stop()
 			announce_round_winner()  # End the round and announce the winner
+			
+		text_input.editable =false # disables after valid word submission
 	else:
 		#  input is invalidallow retry
 		result_label.text = "Invalid word! Try again"
 		text_input.clear() #clears the input for retry
 		text_input.grab_focus()
 		
+	
 func end_turn() -> void:
 	
 	text_input.clear()
@@ -407,6 +410,9 @@ func _on_Timer_timeout():
 	
 	result_label.text += "\nRound over! Next player's turn. Press Space to start."
 	print("Round is done.")
+	
+	#disable input
+	text_input.editable = false 
 	
 	# manually start the next round
 	is_player1_turn = not is_player1_turn
