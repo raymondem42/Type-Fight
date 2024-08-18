@@ -18,8 +18,8 @@ var is_player1_turn = true
 var player1Score = 0
 var player2Score = 0
 
-var player1scores = []
-var player2scores = []
+#var player1scores = []
+#var player2scores = []
 var promptsInfo = []
 var random_index = randi() % 55
 
@@ -436,7 +436,7 @@ func announce_round_winner() -> void:
 	current_round += 1
 	is_player1_turn = true
 	
-	player2scores.append(player2Score)
+	#player2scores.append(player2Score)
 	#player2Score = 0
 	
 	

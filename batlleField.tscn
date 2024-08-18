@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://wt2v21gt8u5"]
+
+[ext_resource type="ArrayMesh" uid="uid://bs8n588tbhk6y" path="res://Island03.obj" id="1_uvqsy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wpet6"]
+albedo_color = Color(0.291554, 0.0950458, 0.00697745, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nnpp3"]
+albedo_color = Color(0, 0.246822, 0.0277558, 1)
+
+[node name="BattleField" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_uvqsy")
+surface_material_override/0 = SubResource("StandardMaterial3D_wpet6")
+surface_material_override/1 = SubResource("StandardMaterial3D_nnpp3")
