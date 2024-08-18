@@ -14,8 +14,6 @@ extends Control
 @onready var countdown_label = $CountdownLabel  # A label to display the countdown timer
 @onready var text_input =  $LineEdit #user enter words
 
-@onready var timerCheck = true
-
 var is_player1_turn = true
 var player1Score = 0
 var player2Score = 0
@@ -25,19 +23,31 @@ var player2scores = []
 var promptsInfo = []
 var random_index = randi() % 55
 
+var current_round = 1
+var total_rounds = 4 #max rounds
+
+var countdown_running = false 
+var round_ready = false
+
 
 func _ready() -> void:
-	timer.wait_time = 15.0
-	timer.one_shot = false
-	timer.start()
-	timer.connect("timeout", _on_Timer_timeout)
+	timer.connect("timeout", Callable (self, "_on_Timer_timeout"))
+	
+	timer.wait_time = 15.0  #change timer time
+	timer.one_shot = true
+	show_ready_message() #show ready message to player
+	
+	#text_input.connect("text_submitted", Callable(self, "_on_text_submitted")) #will take care of user inputs
+	#timer.wait_time = 15.0
+	#timer.one_shot = false
+	#timer.start()
+	#timer.connect("timeout", _on_Timer_timeout)
 	
 	#reading the prompt file
-	var prompt = FileAccess.open((prompt), FileAccess.READ)
-	var prompt_content = prompt.get_as_text()
+	var read_prompt = FileAccess.open((prompt), FileAccess.READ)
+	var prompt_content = read_prompt.get_as_text()
 	promptsInfo = prompt_content.split("\n")
-	prompt.close()
-	
+	read_prompt.close()
 	pick_random_prompt()
 	
 func pick_random_prompt():
@@ -47,8 +57,8 @@ func pick_random_prompt():
 				var selected_prompt = promptsInfo[random_index -1]
 				print(random_index)
 				print("Selected Prompt: ", selected_prompt)
-		else:
-			print("Selected Prompt: Any word, gogogo")
+	else:
+		print("Selected Prompt: Any word, gogogo")
 
 
 #seeing if it's a word in general
@@ -298,21 +308,22 @@ func prompt_function(new_text):
 			return false
 
 
-func _on_text_submitted(new_text: String) -> void:		
+func _on_LineEdit_text_submitted(new_text: String) -> void:		
 	if prompt_function(new_text):
-		timer.stop()
+		#timer.stop()
+		
 		var char_count = new_text.length()
 		print(char_count)
 		if is_player1_turn:
 			player1Score += char_count
-			player1scores.append(player1Score)
+			#player1scores.append(player1Score)
 			result_label.text = "Player 1 scored " + str(char_count) + " points."
 			result_label.text += "\nPlayer 2's turn next. Press Space to start."
 			timer.stop() #will stop timer only if word is valid
 			end_turn()
 		else:
 			player2Score += char_count
-			player2scores.append(player2Score)
+			#player2scores.append(player2Score)
 			result_label.text = "Player 2 scored " + str(char_count) + " points."
 			countdown_running = false #stops countdown
 			timer.stop()
@@ -327,41 +338,71 @@ func end_turn() -> void:
 	
 	text_input.clear()
 	text_input.editable = false #this will disable inputs
-		if(is_player1_turn):
-			player1Score = 0
-			player1scores.append(player1Score)
-		else:
-			player2Score = 0
-			player2scores.append(player2Score)
-			
+	#if(is_player1_turn):
+	player1scores.append(player1Score)
+	player1Score = 0
+	#else:
+	#player2Score = 0
+	#player2scores.append(player2Score)
+			#
 	is_player1_turn = not is_player1_turn
+	
 	round_ready = true #next round is a go
 	countdown_running = false #countdonw not running
 	timer.stop() 
+	random_index = randi() % 55
+	pick_random_prompt()
 	
 	# The next turn will start when the player press space 
-	#start_new_turn()
-	print(player1scores)
-	print(player2scores)
 	
 	
-#func start_new_turn() -> void:
-#	timer.start()  # Start the timer for the next player's turn
-	#print(player1scores)
-	#print(player2scores)
-#	result_label.text = "It's " + (if is_player1_turn then "Player 1" else "Player 2") + "'s turn!"
+func start_new_turn() -> void:
+	if current_round > total_rounds:
+		announce_final_winner()
+		return
+	result_label.text = "Round " + str(current_round) + ": "  # Display the current round number
+		
+	if is_player1_turn:
+		result_label.text = "Player 1's turn. Go!"
+	else:
+		result_label.text = "Player 2's turn. Go!"
+	
+	
+	text_input.clear() #clear field
+	text_input.editable = true #lets player enter guess
+	text_input.grab_focus() #n
+		
+	# starts the countdown
+	countdown_running = true  #set to true when starts
+	round_ready = false # change to not ready
+	timer.start()
+	_countdown_timer(15)  # change countdown time
+
+func show_ready_message() -> void:
+	result_label.text = "Round " + str(current_round) + " is about to start. Press SPACE to begin." 
+	round_ready = true  # Change it back to ready to start
+	text_input.editable = false  # Disable the text input until the round starts  
+
+func _countdown_timer(time_left: int) -> void:
+	# Display countdown timer
+	if countdown_running and time_left > 0:
+		countdown_label.text = str(time_left)
+		await get_tree().create_timer(1.0).timeout
+		if countdown_running: 
+			_countdown_timer(time_left - 1)
+	else:
+		countdown_label.text = ""  # Clear the countdown label when the timer ends
 
 func _on_Timer_timeout():
-	print("you're out of time")
-	timer.stop()
+	countdown_running = false #stop countdown
 	# This function is called when the timer runs out
 	if is_player1_turn:
-			player1Score = 0
-			player1scores.append(player1Score)
+			#player1Score = 0
+			#player1scores.append(player1Score)
 			result_label.text = "Time's up! Player 1's score: " + str(player1Score)
 	else:
-		player2Score = 0
-		player2scores.append(player2Score)
+		#player2Score = 0
+		#player2scores.append(player2Score)
 		result_label.text = "Time's up! Player 2's score: " + str(player2Score)
 	
 	result_label.text += "\nRound over! Next player's turn. Press Space to start."
@@ -393,6 +434,14 @@ func announce_round_winner() -> void:
 	
 	# Prepare for the next round or end the game
 	current_round += 1
+	is_player1_turn = true
+	
+	player2scores.append(player2Score)
+	player2Score = 0
+	
+	random_index = randi() % 55
+	pick_random_prompt()
+	
 	if current_round > total_rounds:
 		announce_final_winner()
 	else:
@@ -401,6 +450,7 @@ func announce_round_winner() -> void:
 		else:
 			result_label.text += "\nPress Space to start Round " + str(current_round) + "."
 		round_ready = true  # Set to true so the player can start the next round
+		
 		
 func announce_final_winner() -> void:
 	# Calculate the total points for each player
@@ -427,8 +477,6 @@ func reset_scores() -> void:
 	player2Score = 0
 	
 
-	#start_new_turn()
 
-
-func _on_timer_timeout() -> void:
-	pass # Replace with function body.
+#func _on_timer_timeout() -> void:
+	#pass # Replace with function body.
