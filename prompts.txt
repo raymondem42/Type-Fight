@@ -3,19 +3,18 @@ A word without the Letter A
 A word that starts with Y
 A Word with 2 of the same letter in it
 The longest palindrome you can think of (read the same forward and backwards)
-A word that contain all five vowels (a, e, i, o, u)
-A word that start and end with the same letter
-A word that end in X
-A word that has exactly 2 vowels
-A word that end in "ing"
-A word that has exactly 2 vowels
-A word that contain the letter J
-A word that start with Ch 
+A word that contains at least 3 vowels
+A word that ends in "ing"
+A word that contains exactly 2 vowels
+A word that contains the letter J
+A word that start with "Ch"
 A word that has "th" in it
-A word that has y in the middle of the word
-A word that has no vowels
-Any Country
-Any animal (spaces allowed)
+A word that contain 0 vowels
+A word that ends in X
+A word that start and end with the same letter
+A word that contains "Y" but doesn't start or end with "Y"
+Any country (Spaces allowed)
+Any animal (Spaces allowed)
 Any element from the periodic table
 Any food (spaces allowed)
 Any animal that starts with the letter E (Spaces allowed)
