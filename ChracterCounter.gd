@@ -49,13 +49,6 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 	if timer.is_stopped():
 		return  # Ignore input if the timer has ended
 		
-	timer.stop() #stops becaouse player enterd something
-	countdown_running = false #stops countdown
-	
-	text_input.clear() #clears teh users input for next user
-	text_input.editable = false # disables editing until the next round starts 
-	
-
 	if check_string_in_file(new_text, WordCheckFile):
 		var char_count = new_text.length()
 		if is_player1_turn:
@@ -63,18 +56,29 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			player1scores.append(player1Score)
 			result_label.text = "Player 1 scored " + str(char_count) + " points."
 			result_label.text += "\nPlayer 2's turn next. Press Space to start."
-			
+			timer.stop() #will stop timer only if word is valid
+			end_turn()
 		else:
 			player2Score += char_count
 			player2scores.append(player2Score)
 			result_label.text = "Player 2 scored " + str(char_count) + " points."
+			countdown_running = false #stops countdown
+			timer.stop()
 			announce_round_winner()  # End the round and announce the winner
 	else:
-		#  input is invalid
-		result_label.text = "Invalid word!"
+		#  input is invalidallow retry
+		result_label.text = "Invalid word! Try again"
+		text_input.clear() #clears the input for retry
+		text_input.grab_focus()
 		
+func end_turn() -> void:
+	
+	text_input.clear()
+	text_input.editable = false #this will disable inputs
 	is_player1_turn = not is_player1_turn
 	round_ready = true #next round is a go
+	countdown_running = false #countdonw not running
+	timer.stop() 
 	
 	# The next turn will start when the player press space 
 	
@@ -89,6 +93,7 @@ func start_new_turn() -> void:
 	else:
 		result_label.text = "Player 2's turn. Go!"
 	
+	text_input.clear() #clear field
 	text_input.editable = true #lets player enter guess
 	text_input.grab_focus() #n
 	
