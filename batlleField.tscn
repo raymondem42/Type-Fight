@@ -1,5 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://wt2v21gt8u5"]
+[gd_scene load_steps=10 format=3 uid="uid://wt2v21gt8u5"]
 
+[ext_resource type="Script" path="res://batlle_field.gd" id="1_bfbwb"]
 [ext_resource type="ArrayMesh" uid="uid://bs8n588tbhk6y" path="res://Island03.obj" id="1_uvqsy"]
 [ext_resource type="PackedScene" uid="uid://c5qmq18y0x3rt" path="res://WordInput.tscn" id="2_t5gcl"]
 [ext_resource type="Texture2D" uid="uid://btcajir0tvimh" path="res://rainbow_up.png" id="3_155b0"]
@@ -25,14 +26,16 @@ ambient_light_color = Color(8.66354e-07, 0.596559, 0.758849, 1)
 reflected_light_source = 2
 
 [node name="BattleField" type="Node3D"]
+script = ExtResource("1_bfbwb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.4, 0, 0, 0, 1, 0, 0, 0, 1.4, 0, 0, 0)
 mesh = ExtResource("1_uvqsy")
 surface_material_override/0 = SubResource("StandardMaterial3D_wpet6")
 surface_material_override/1 = SubResource("StandardMaterial3D_nnpp3")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.144903, -0.400933, 0.904575, -0.0140521, 0.914965, 0.403288, -0.989346, 0.0457262, -0.138215, 1.22761, 1.67668, -0.215912)
+transform = Transform3D(-0.144314, -0.433092, 0.889722, -0.0191761, 0.900189, 0.435077, -0.989346, 0.0457262, -0.138215, 2.09831, 2.02547, -0.297926)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

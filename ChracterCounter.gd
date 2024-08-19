@@ -8,7 +8,7 @@ extends Control
 @onready var FoodCheckFile = "res://food.txt"
 @onready var CountryCheckFile = "res://countries.txt"
 @onready var prompt = "res://prompts.txt"
-
+@onready var bean_scene = preload("res://bean.tscn")
 
 @onready var timer = $Timer
 @onready var countdown_label = $CountdownLabel  # A label to display the countdown timer
@@ -17,6 +17,10 @@ extends Control
 var is_player1_turn = true
 var player1Score = 0
 var player2Score = 0
+var team = 0
+
+var beanSpawnAmountP1 = 0
+var beanSpawnAmountP2 = 0
 
 #var player1scores = []
 #var player2scores = []
@@ -313,11 +317,14 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 		#timer.stop()
 		
 		var char_count = new_text.length()
-		print(char_count)
+		#print(char_count)
+		beanSpawnAmountP1 = char_count
 		if is_player1_turn:
 			player1Score += char_count
 			#player1scores.append(player1Score)
 			result_label.text = "Player 1 scored " + str(char_count) + " points."
+			team = 1
+			spawn_beans(beanSpawnAmountP1, team)
 			result_label.text += "\nPlayer 2's turn next. Press Space to start."
 			timer.stop() #will stop timer only if word is valid
 			end_turn()
@@ -325,6 +332,8 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			player2Score += char_count
 			#player2scores.append(player2Score)
 			result_label.text = "Player 2 scored " + str(char_count) + " points."
+			team = 2
+			spawn_beans(beanSpawnAmountP1, team)
 			countdown_running = false #stops countdown
 			timer.stop()
 			announce_round_winner()  # End the round and announce the winner
@@ -484,6 +493,25 @@ func reset_scores() -> void:
 	# Reset scores for the next round
 	player1Score = 0
 	player2Score = 0
+	
+
+func spawn_beans(count, team):
+	for i in range(count - 1):
+		var bean = bean_scene.instantiate()
+		
+		#bean.team = team
+		#bean.scale = Vector3(.08,.08,.08)
+		bean.scale = Vector3(.08,.08,.08)
+		if(team == 1):
+			bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 - .7)
+			add_child(bean)
+		else:
+			#bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 - .6)
+			bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * 1 - 0.3)
+			bean.rotation_degrees.y = 180  # Flip to face the other way
+			add_child(bean)
+		# Assign targets for the beans to fight
+		#bean.target = find_target(bean)
 	
 
 
