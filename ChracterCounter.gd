@@ -28,6 +28,7 @@ var total_rounds = 4 #max rounds
 
 var countdown_running = false 
 var round_ready = false
+var allow_enter = true
 
 
 func _ready() -> void:
@@ -309,8 +310,12 @@ func prompt_function(new_text):
 
 
 func _on_LineEdit_text_submitted(new_text: String) -> void:		
+	if not allow_enter: 
+		return
+		
 	if prompt_function(new_text):
-		#timer.stop()
+		allow_enter = false
+		text_input.editable = false
 		
 		var char_count = new_text.length()
 		print(char_count)
@@ -329,14 +334,15 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			timer.stop()
 			announce_round_winner()  # End the round and announce the winner
 			
-		text_input.editable =false # disables after valid word submission
-		#disable the enter key
+		
 		
 	else:
 		#  input is invalidallow retry
 		result_label.text = "Invalid word! Try again"
 		text_input.clear() #clears the input for retry
 		text_input.grab_focus()
+		allow_enter = true
+		text_input.editable =true
 		
 	
 func end_turn() -> void:
@@ -354,6 +360,7 @@ func end_turn() -> void:
 	
 	round_ready = true #next round is a go
 	countdown_running = false #countdonw not running
+	allow_enter = false
 	timer.stop() 
 	random_index = randi() % 55
 	pick_random_prompt()
@@ -376,6 +383,7 @@ func start_new_turn() -> void:
 	text_input.clear() #clear field
 	text_input.editable = true #lets player enter guess
 	text_input.grab_focus() #n
+	allow_enter = true
 		
 	# starts the countdown
 	countdown_running = true  #set to true when starts
@@ -412,8 +420,6 @@ func _on_Timer_timeout():
 	
 	result_label.text += "\nRound over! Next player's turn. Press Space to start."
 	print("Round is done.")
-	
-	#disable input
 	text_input.editable = false 
 	
 	# manually start the next round
@@ -421,9 +427,11 @@ func _on_Timer_timeout():
 	round_ready = true #change to show next round is ready to start
 	
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.is_pressed() and event.keycode == KEY_SPACE:
-		if round_ready:
+	if event is InputEventKey and event.is_pressed():
+		if event.keycode == KEY_SPACE and round_ready:
 			start_new_turn()
+		if (event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER) and not allow_enter:
+			return  # Ignore Enter key press if disabled
 			
 func announce_round_winner() -> void:
 	#announce winner of round with pts for both
