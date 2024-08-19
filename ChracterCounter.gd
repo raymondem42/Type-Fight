@@ -8,7 +8,12 @@ extends Control
 @onready var FoodCheckFile = "res://food.txt"
 @onready var CountryCheckFile = "res://countries.txt"
 @onready var prompt = "res://prompts.txt"
+
 @onready var bean_scene = preload("res://bean.tscn")
+
+@onready var Blue_bean_scene = preload("res://beanBlue.tscn")
+@onready var central_force = preload("res://cental_force.gd")
+
 
 @onready var timer = $Timer
 @onready var countdown_label = $CountdownLabel  # A label to display the countdown timer
@@ -56,12 +61,13 @@ func _ready() -> void:
 	pick_random_prompt()
 	
 func pick_random_prompt():
-	print(random_index)
-	if(random_index < 22):
+	if(random_index < 22 and random_index > 0):
 		if promptsInfo.size() > 0:
 				var selected_prompt = promptsInfo[random_index -1]
 				print(random_index)
 				print("Selected Prompt: ", selected_prompt)
+	elif (random_index == 0):
+		random_index = 25
 	else:
 		print("Selected Prompt: Any word, gogogo")
 
@@ -505,23 +511,22 @@ func reset_scores() -> void:
 
 func spawn_beans(count, team):
 	for i in range(count - 1):
-		var bean = bean_scene.instantiate()
-		
-		#bean.team = team
-		#bean.scale = Vector3(.08,.08,.08)
-		bean.scale = Vector3(.08,.08,.08)
 		if(team == 1):
+			var bean = bean_scene.instantiate()
+			var collision_shape = bean.get_node("RigidBody3D/CollisionShape3D")
+			var mesh_instance = bean.get_node("RigidBody3D/MeshInstance3D")
+			#mesh_instance.scale = Vector3(0.08, 0.08, 0.08)
+			collision_shape.scale = Vector3(0.08, 0.08, 0.08)
 			bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 - .7)
 			add_child(bean)
+			print("Bean added to scene tree: ", bean.is_inside_tree())
 		else:
-			#bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 - .6)
-			bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * 1 - 0.3)
-			bean.rotation_degrees.y = 180  # Flip to face the other way
-			add_child(bean)
+			var blueBean = Blue_bean_scene.instantiate()
+			blueBean.scale = Vector3(.08,.08,.08)
+			blueBean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 + 0.2)
+			blueBean.rotation_degrees.y = 180  # Flip to face the other way
+			add_child(blueBean)
+			
+	
 		# Assign targets for the beans to fight
 		#bean.target = find_target(bean)
-	
-
-
-#func _on_timer_timeout() -> void:
-	#pass # Replace with function body.
