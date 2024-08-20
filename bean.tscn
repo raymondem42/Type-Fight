@@ -1,38 +1,90 @@
-[gd_scene load_steps=12 format=3 uid="uid://dxg2yfvn8a6an"]
+[gd_scene load_steps=16 format=3 uid="uid://dxg2yfvn8a6an"]
 
 [ext_resource type="Script" path="res://BeanBehaviour.gd" id="1_sy2vi"]
 [ext_resource type="Script" path="res://Beans.gd" id="3_yij5m"]
-[ext_resource type="ArrayMesh" uid="uid://ckvw8160xd72x" path="res://sword.obj" id="4_5okos"]
-[ext_resource type="ArrayMesh" uid="uid://b2pkypxofdorf" path="res://shield.obj" id="5_8dq1j"]
+[ext_resource type="ArrayMesh" uid="uid://cmcppmip1s32y" path="res://BoxingGlove.obj" id="5_tcfm3"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x71ax"]
-albedo_color = Color(0.505413, 0.0931927, 0.0750769, 1)
+[sub_resource type="Animation" id="Animation_by886"]
+resource_name = "punch"
+length = 0.433
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RigidBody3D/MeshInstance3D/Node3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.433),
+"transitions": PackedFloat32Array(-2, -2, -2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.00461427, 0.597712), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RigidBody3D/MeshInstance3D/Node3D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.433),
+"transitions": PackedFloat32Array(-2, -2, -2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.625962, 0, 0), Vector3(0, 0, 0)]
+}
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_j5bdk"]
-material = SubResource("StandardMaterial3D_x71ax")
+[sub_resource type="Animation" id="Animation_rgp0x"]
+length = 0.001
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bts8y"]
-albedo_color = Color(0.91664, 0.91664, 0.91664, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_yqxh1"]
-material = SubResource("StandardMaterial3D_bts8y")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slbh6"]
-albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_ra3dp"]
-material = SubResource("StandardMaterial3D_slbh6")
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5bbjj"]
+_data = {
+"RESET": SubResource("Animation_rgp0x"),
+"punch": SubResource("Animation_by886")
+}
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uptra"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sew40"]
+albedo_color = Color(0.505413, 0.0931927, 0.0750769, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_j5bdk"]
+material = SubResource("StandardMaterial3D_sew40")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unpyr"]
+albedo_color = Color(0.91664, 0.91664, 0.91664, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_yqxh1"]
+material = SubResource("StandardMaterial3D_unpyr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iul41"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ra3dp"]
+material = SubResource("StandardMaterial3D_iul41")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m44uo"]
+albedo_color = Color(0.505882, 0.0941176, 0.0745098, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bgevg"]
+albedo_color = Color(0.979528, 0.494061, 0.435908, 1)
+
 [node name="Beans" type="Node3D"]
-transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, 0, 0)
 script = ExtResource("1_sy2vi")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
+disable_mode = 2
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("3_yij5m")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RigidBody3D"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_5bbjj")
+}
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_uptra")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
 transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, 0, 0)
@@ -59,16 +111,18 @@ mesh = SubResource("SphereMesh_ra3dp")
 transform = Transform3D(0.5, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.00964823, 0.792658, 0.403286)
 mesh = SubResource("SphereMesh_ra3dp")
 
-[node name="Sword" type="MeshInstance3D" parent="RigidBody3D/MeshInstance3D"]
-transform = Transform3D(0.529039, -0.140519, -0.583414, 0.205369, 0.77319, -5.02847e-09, 0.563862, -0.149769, 0.547383, -0.32893, 0.272736, 0.72485)
-mesh = ExtResource("4_5okos")
-skeleton = NodePath("../../..")
+[node name="Node3D" type="Node3D" parent="RigidBody3D/MeshInstance3D"]
 
-[node name="Shield" type="MeshInstance3D" parent="RigidBody3D/MeshInstance3D"]
-transform = Transform3D(0.003, 0, 0, 0, 0.003, 0, 0, 0, 0.003, 0.0222956, -0.193411, 0.681829)
-mesh = ExtResource("5_8dq1j")
-skeleton = NodePath("../../..")
+[node name="BoxingGlove" type="MeshInstance3D" parent="RigidBody3D/MeshInstance3D/Node3D"]
+transform = Transform3D(-0.59996, -0.0011156, 0.00681009, 0.00690086, -0.0969868, 0.592069, -3.57628e-08, 0.592108, 0.0969932, 0.553644, 0.110371, 0.329778)
+mesh = ExtResource("5_tcfm3")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_m44uo")
+surface_material_override/1 = SubResource("StandardMaterial3D_bgevg")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
-transform = Transform3D(0.08, 0, 0, 0, 0.08, 0, 0, 0, 0.08, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_uptra")
+[node name="BoxingGlove2" type="MeshInstance3D" parent="RigidBody3D/MeshInstance3D/Node3D"]
+transform = Transform3D(0.365948, 0.114206, -0.461562, -0.475322, 0.102952, -0.351383, 0.0123145, 0.579964, 0.153266, -0.575253, 0.110371, 0.329778)
+mesh = ExtResource("5_tcfm3")
+skeleton = NodePath("../../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_m44uo")
+surface_material_override/1 = SubResource("StandardMaterial3D_bgevg")

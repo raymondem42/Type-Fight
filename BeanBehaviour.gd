@@ -1,5 +1,5 @@
 extends Node3D
-
+var team = "red"  # or "blue"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

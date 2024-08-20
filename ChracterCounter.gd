@@ -2,6 +2,7 @@ extends Control
 
 
 @onready var result_label = $Label
+@onready var Winner_label = $Winner
 @onready var WordCheckFile = "res://words_alpha.txt"
 @onready var AnimalCheckFile = "res://animals.txt"
 @onready var ElementCheckFile = "res://elements.txt"
@@ -18,11 +19,17 @@ extends Control
 @onready var timer = $Timer
 @onready var countdown_label = $CountdownLabel  # A label to display the countdown timer
 @onready var text_input =  $LineEdit #user enter words
+@onready var prompt_label =  $PromptLabel #user enter words
 
+@onready var red_remain = $RedRemaining
+@onready var blue_remain = $BlueRemaining
 var is_player1_turn = true
 var player1Score = 0
 var player2Score = 0
 var team = 0
+
+var TheRedBeans = []
+var TheBlueBeans = []
 
 var beanSpawnAmountP1 = 0
 var beanSpawnAmountP2 = 0
@@ -33,9 +40,9 @@ var promptsInfo = []
 var random_index = randi() % 55
 
 var current_round = 1
-var total_rounds = 4 #max rounds
+var total_rounds = 3 #max rounds
 
-var countdown_running = false 
+var countdown_running = false
 var round_ready = false
 var allow_enter = true
 
@@ -46,6 +53,8 @@ func _ready() -> void:
 	timer.wait_time = 15.0  #change timer time
 	timer.one_shot = true
 	show_ready_message() #show ready message to player
+
+
 	
 	#text_input.connect("text_submitted", Callable(self, "_on_text_submitted")) #will take care of user inputs
 	#timer.wait_time = 15.0
@@ -63,18 +72,22 @@ func _ready() -> void:
 func pick_random_prompt():
 	if(random_index < 22 and random_index > 0):
 		if promptsInfo.size() > 0:
-				var selected_prompt = promptsInfo[random_index -1]
-				print(random_index)
-				print("Selected Prompt: ", selected_prompt)
+			var selected_prompt = promptsInfo[random_index -1]
+			print("Selected Prompt: ", selected_prompt)
+			prompt_label.text = selected_prompt
 	elif (random_index == 0):
 		random_index = 25
 	else:
+		var selected_prompt = ""
 		print("Selected Prompt: Any word, gogogo")
+		selected_prompt = "Enter any word"
+		prompt_label.text = selected_prompt
+		
 
 
 #seeing if it's a word in general
 func check_string_in_file(input_string: String, file_path: String) -> bool:
-	input_string = input_string.strip_edges().to_lower()  # Normalize the input	
+	input_string = input_string.strip_edges().to_lower()  # Normalize the input
 	var file = FileAccess.open((file_path), FileAccess.READ)
 	while not file.eof_reached():
 		var line = file.get_line().strip_edges().to_lower()
@@ -92,11 +105,13 @@ func has_two_of_same_letter(new_text: String) -> bool:
 		if letter in letter_counts:
 			letter_counts[letter] += 1
 		else:
-				letter_counts[letter] = 1
-				# Check if any letter appears exactly twice
-				for count in letter_counts.values():
-					if count == 2:
-						return true
+			letter_counts[letter] = 1
+	
+	# Check if any letter appears more than once
+	for count in letter_counts.values():
+		if count > 1:
+			return true
+	
 	return false
 
 
@@ -158,98 +173,98 @@ func prompt_function(new_text):
 	#print("hello world")
 	match random_index:
 		1:
-			if "e" in new_text.to_lower():
+			if "e" in new_text.to_lower() and check_string_in_file(new_text, WordCheckFile):
 				print("that has an E")
 				return false
 			else:
 				print("no E here")
 				return true
 		2:
-			if "a" in new_text.to_lower():
+			if "a" in new_text.to_lower() and check_string_in_file(new_text, WordCheckFile):
 				print("that has an A")
 				return false
 			else:
 				print("no A here")
 				return true
 		3:
-			if new_text.to_lower().begins_with("y"):
+			if new_text.to_lower().begins_with("y") and check_string_in_file(new_text, WordCheckFile):
 				print("begins wtih Y")
 				return true
 			else:
 				print("no y here")
 				return false
 		4:
-			if has_two_of_same_letter(new_text):
+			if has_two_of_same_letter(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("There's 2 letters here")
 				return true
 			else:
 				print("no 2 leter")
 				return false
 		5:
-			if is_palindrome(new_text):
+			if is_palindrome(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("yup that's a palindrome")
 				return true
 			else:
 				print("not a palindrome")
 				return false
 		6:
-			if contains_vowels(new_text):
+			if contains_vowels(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("yup that's 3 vowels")
 				return true
 			else:
 				print("not at least 3")
 				return false
 		7:
-			if new_text.to_lower().ends_with("ing"):
+			if new_text.to_lower().ends_with("ing") and check_string_in_file(new_text, WordCheckFile):
 				print("yup that's end with ing")
 				return true
 			else:
 				print("no it does not")
 				return false
 		8:
-			if contains_2_vowels(new_text):
+			if contains_2_vowels(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("yup that has 2")
 				return true
 			else:
 				print("no it does not")
 				return false
 		9:
-			if "j" in new_text.to_lower():
+			if "j" in new_text.to_lower() and check_string_in_file(new_text, WordCheckFile):
 				print("yup that has a J")
 				return true
 			else:
 				print("no it does not")
 				return false
 		10:
-			if new_text.to_lower().begins_with("ch"):
+			if new_text.to_lower().begins_with("ch") and check_string_in_file(new_text, WordCheckFile):
 				print("yup that starts with ch")
 				return true
 			else:
 				print("no it does not")
 				return false
 		11:
-			if "th" in new_text.to_lower():
+			if "th" in new_text.to_lower() and check_string_in_file(new_text, WordCheckFile):
 				print("yup that has a th")
 				return true
 			else:
 				print("no it does not")
 				return false
 		12:
-			if contains_no_vowels(new_text):
+			if contains_no_vowels(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("yup that has none")
 				return true
 			else:
 				print("no it does not")
 				return false
 		13:
-			if new_text.to_lower().ends_with("x"):
+			if new_text.to_lower().ends_with("x") and check_string_in_file(new_text, WordCheckFile):
 				print("yup that ends in x")
 				return true
 			else:
 				print("no it does not")
 				return false
 		14:
-			if starts_and_ends_with_same_letter(new_text):
+			if starts_and_ends_with_same_letter(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("yup that starts and ends the same")
 				return true
 			else:
@@ -257,7 +272,7 @@ func prompt_function(new_text):
 				return false
 		15:
 			#seeing if Y is in the middle of the word
-			if contains_y_not_at_beginning_or_end(new_text):
+			if contains_y_not_at_beginning_or_end(new_text) and check_string_in_file(new_text, WordCheckFile):
 				print("yup that has y in the middle ")
 				return true
 			else:
@@ -319,8 +334,17 @@ func prompt_function(new_text):
 			return false
 
 
-func _on_LineEdit_text_submitted(new_text: String) -> void:		
-	if not allow_enter: 
+func _on_LineEdit_text_submitted(new_text: String) -> void:
+	if not allow_enter:
+		return
+	
+	new_text = new_text.strip_edges()
+	
+	var regex = RegEx.new()
+	regex.compile("\\s+")
+	new_text = regex.sub(new_text, " ", true)
+	
+	if(new_text == ""):
 		return
 		
 	if prompt_function(new_text):
@@ -335,8 +359,10 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			#player1scores.append(player1Score)
 			result_label.text = "Player 1 scored " + str(char_count) + " points."
 			team = 1
+			prompt_label.visible = false
 			spawn_beans(beanSpawnAmountP1, team)
 			result_label.text += "\nPlayer 2's turn next. Press Space to start."
+			countdown_running = false #stops countdown
 			timer.stop() #will stop timer only if word is valid
 			end_turn()
 		else:
@@ -348,8 +374,6 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 			countdown_running = false #stops countdown
 			timer.stop()
 			announce_round_winner()  # End the round and announce the winner
-			
-		
 		
 	else:
 		#  input is invalidallow retry
@@ -376,7 +400,7 @@ func end_turn() -> void:
 	round_ready = true #next round is a go
 	countdown_running = false #countdonw not running
 	allow_enter = false
-	timer.stop() 
+	timer.stop()
 	random_index = randi() % 55
 	pick_random_prompt()
 	
@@ -399,7 +423,7 @@ func start_new_turn() -> void:
 	text_input.editable = true #lets player enter guess
 	text_input.grab_focus() #n
 	allow_enter = true
-		
+	prompt_label.visible = true
 	# starts the countdown
 	countdown_running = true  #set to true when starts
 	round_ready = false # change to not ready
@@ -407,16 +431,17 @@ func start_new_turn() -> void:
 	_countdown_timer(15)  # change countdown time
 
 func show_ready_message() -> void:
-	result_label.text = "Round " + str(current_round) + " is about to start. Press SPACE to begin." 
+	prompt_label.visible = false
+	result_label.text = "Round " + str(current_round) + " is about to start. Press SPACE to begin."
 	round_ready = true  # Change it back to ready to start
-	text_input.editable = false  # Disable the text input until the round starts  
+	text_input.editable = false  # Disable the text input until the round starts
 
 func _countdown_timer(time_left: int) -> void:
 	# Display countdown timer
 	if countdown_running and time_left > 0:
 		countdown_label.text = str(time_left)
 		await get_tree().create_timer(1.0).timeout
-		if countdown_running: 
+		if countdown_running:
 			_countdown_timer(time_left - 1)
 	else:
 		countdown_label.text = ""  # Clear the countdown label when the timer ends
@@ -427,7 +452,7 @@ func _on_Timer_timeout():
 	if is_player1_turn:
 			#player1Score = 0
 			#player1scores.append(player1Score)
-			result_label.text = "Time's up! Player 1's score: " + str(player1Score)
+		result_label.text = "Time's up! Player 1's score: " + str(player1Score)
 	else:
 		#player2Score = 0
 		#player2scores.append(player2Score)
@@ -435,7 +460,7 @@ func _on_Timer_timeout():
 	
 	result_label.text += "\nRound over! Next player's turn. Press Space to start."
 	print("Round is done.")
-	text_input.editable = false 
+	text_input.editable = false
 	
 	# manually start the next round
 	is_player1_turn = not is_player1_turn
@@ -447,21 +472,18 @@ func _input(event: InputEvent) -> void:
 			start_new_turn()
 		if (event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER) and not allow_enter:
 			return  # Ignore Enter key press if disabled
+		if (event.keycode == KEY_SPACE and endGame == true):
+			#var MainMenu = load("res://mainmenu.tscn")
+			get_tree().change_scene_to_file("res://main_menu_3d.tscn")
+
+			
 			
 func announce_round_winner() -> void:
 	#announce winner of round with pts for both
 	result_label.text = "Round " + str(current_round) + " results:\n"
-	result_label.text += "Player 1: " + str(player1Score) + " points\n"
-	result_label.text += "Player 2: " + str(player2Score) + " points\n"
+	result_label.text += "Player 1 has " + str(player1Score) + " troop ready to fight\n"
+	result_label.text += "Player 2 has " + str(player2Score) + " troops ready to fight \n"
 	
-	
-	# Announce the winner of the round
-	if player1Score > player2Score:
-		result_label.text += "\nPlayer 1 wins this round!"
-	elif player2Score > player1Score:
-		result_label.text += "\nPlayer 2 wins this round!"
-	else:
-		result_label.text += "\nThis round is a tie!"
 	
 	# Prepare for the next round or end the game
 	current_round += 1
@@ -489,17 +511,22 @@ func announce_final_winner() -> void:
 	var player1_total_points = player1Score
 	var player2_total_points = player2Score
 	
+	countdown_running = false
+	timer.stop()
+	await get_tree().create_timer(1).timeout
+	countdown_running = true
+	_countdown_timer(9)  # change countdown time
+	await get_tree().create_timer(9).timeout
+	modify_beans()
 	# Announce the overall winner after the last round
-	result_label.text = "Final results:\n"
-	result_label.text += "Player 1: " + str(player1_total_points) + " points\n"
-	result_label.text += "Player 2: " + str(player2_total_points) + " points\n"
 	
-	if player1_total_points > player2_total_points:
-		result_label.text += "Player 1 WINS!"
-	elif player2_total_points > player1_total_points:
-		result_label.text += "Player 2 WINS!" 
-	else:
-		result_label.text += "The game is a tie with both players scoring " + str(player1_total_points) + " points!"
+	
+	#if player1_total_points > player2_total_points:
+		#result_label.text += "Player 1 WINS!"
+	#elif player2_total_points > player1_total_points:
+		#result_label.text += "Player 2 WINS!" 
+	#else:
+		#result_label.text += "The game is a tie with both players scoring " + str(player1_total_points) + " points!"
 
 	# Optionally, reset the game or exit
 
@@ -510,23 +537,58 @@ func reset_scores() -> void:
 	
 
 func spawn_beans(count, team):
-	for i in range(count - 1):
+	for i in range(count):
 		if(team == 1):
 			var bean = bean_scene.instantiate()
-			var collision_shape = bean.get_node("RigidBody3D/CollisionShape3D")
-			var mesh_instance = bean.get_node("RigidBody3D/MeshInstance3D")
-			#mesh_instance.scale = Vector3(0.08, 0.08, 0.08)
-			collision_shape.scale = Vector3(0.08, 0.08, 0.08)
-			bean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 - .7)
+			var rigid_body = bean.get_node("RigidBody3D")
+			bean.position = Vector3(randf() * 1 - .4, 3, randf() * .5 - .7)
 			add_child(bean)
-			print("Bean added to scene tree: ", bean.is_inside_tree())
+			TheRedBeans.append(rigid_body)
 		else:
 			var blueBean = Blue_bean_scene.instantiate()
+			var Blue_rigid_body = blueBean.get_node("RigidBody3D")
 			blueBean.scale = Vector3(.08,.08,.08)
-			blueBean.position = Vector3(randf() * 1 - .4, 1.5, randf() * .5 + 0.2)
+			blueBean.position = Vector3(randf() * 1 - .4, 3, randf() * .5 + 0.2)
 			blueBean.rotation_degrees.y = 180  # Flip to face the other way
 			add_child(blueBean)
+			TheBlueBeans.append(Blue_rigid_body)
 			
+func modify_beans():
+	for bean in TheRedBeans:
+		#var beans_script = bean.get_script()
+		bean.set_variable(2)
+	for bean in TheBlueBeans:
+		#var beans_script = bean.get_script()
+		bean.set_variable(2)
+	result_label.visible = false
+	prompt_label.visible = false
+	text_input.visible = false
+	var canvasLayer = get_parent()
+	var node_with_enable_top = canvasLayer.get_node("..")
+	node_with_enable_top.enable_top()
+	
+	var camera_orbit_node = canvasLayer.get_node("Orbiting")
+	camera_orbit_node._MoveCameraIn()
+	#for bean in TheBlueBeans:
+		#bean.set_variable(true)
+var endGame = false
+#handles winner
+func TrackBeanCount(color):
+	if(color == 1):
+		player2Score -= 1
+	else:
+		player1Score -= 1
+		
+	red_remain.text = "Red beans left: " + str(player1Score)
+	blue_remain.text = "Blue beans  left: " + str(player2Score)
+		
+	if(player1Score <= 0):
+		Winner_label.text = "Player 2 scored WINS \n Press space to go to the main menu"
+		endGame = true
+
+	if(player2Score <= 0):
+		Winner_label.text = "Player 1 scored WINS \n Press space to go to the main menu"
+		endGame = true
 	
 		# Assign targets for the beans to fight
 		#bean.target = find_target(bean)

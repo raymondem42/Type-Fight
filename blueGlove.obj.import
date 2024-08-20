@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dy7k4rkhni1wg"
+path="res://.godot/imported/blueGlove.obj-4faa40b0c54bfeb274567a84c9020623.mesh"
+
+[deps]
+
+files=["res://.godot/imported/blueGlove.obj-4faa40b0c54bfeb274567a84c9020623.mesh"]
+
+source_file="res://blueGlove.obj"
+dest_files=["res://.godot/imported/blueGlove.obj-4faa40b0c54bfeb274567a84c9020623.mesh", "res://.godot/imported/blueGlove.obj-4faa40b0c54bfeb274567a84c9020623.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

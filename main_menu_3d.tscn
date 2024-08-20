@@ -1,0 +1,238 @@
+[gd_scene load_steps=28 format=3 uid="uid://duf17imv4ti3f"]
+
+[ext_resource type="ArrayMesh" uid="uid://bs8n588tbhk6y" path="res://Island03.obj" id="1_sarr8"]
+[ext_resource type="Script" path="res://camera_3d.gd" id="2_j4xoy"]
+[ext_resource type="Texture2D" uid="uid://btcajir0tvimh" path="res://rainbow_up.png" id="3_vd3gp"]
+[ext_resource type="PackedScene" uid="uid://bf88svfy3qt0l" path="res://mainmenu.tscn" id="4_oslj0"]
+[ext_resource type="ArrayMesh" uid="uid://cmcppmip1s32y" path="res://BoxingGlove.obj" id="6_60lsm"]
+[ext_resource type="FontFile" uid="uid://d4lesys1l61oe" path="res://AlfaSlabOne-Regular.ttf" id="6_yh1x1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_da58o"]
+albedo_color = Color(0.291554, 0.0950458, 0.00697745, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3nbi1"]
+albedo_color = Color(8.66354e-07, 0.430139, 0.0761411, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1p5pb"]
+panorama = ExtResource("3_vd3gp")
+
+[sub_resource type="Sky" id="Sky_7hc01"]
+sky_material = SubResource("PanoramaSkyMaterial_1p5pb")
+
+[sub_resource type="Environment" id="Environment_qew33"]
+background_mode = 2
+background_energy_multiplier = 1.94
+sky = SubResource("Sky_7hc01")
+ambient_light_source = 3
+ambient_light_color = Color(8.66354e-07, 0.596559, 0.758849, 1)
+reflected_light_source = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qufrr"]
+albedo_color = Color(0, 0.223529, 0.423529, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_sybpo"]
+material = SubResource("StandardMaterial3D_qufrr")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_itc0e"]
+albedo_color = Color(0.91664, 0.91664, 0.91664, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_3bg6u"]
+material = SubResource("StandardMaterial3D_itc0e")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bfxp8"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_y461l"]
+material = SubResource("StandardMaterial3D_bfxp8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dw5hq"]
+albedo_color = Color(0, 0.223529, 0.423529, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0lju1"]
+albedo_color = Color(0.447369, 0.708697, 0.999993, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x71ax"]
+albedo_color = Color(0.505413, 0.0931927, 0.0750769, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_kag4e"]
+material = SubResource("StandardMaterial3D_x71ax")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bts8y"]
+albedo_color = Color(0.91664, 0.91664, 0.91664, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tcunc"]
+material = SubResource("StandardMaterial3D_bts8y")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_slbh6"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dglt4"]
+material = SubResource("StandardMaterial3D_slbh6")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_onyje"]
+albedo_color = Color(0.505882, 0.0941176, 0.0745098, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s5oly"]
+albedo_color = Color(0.979528, 0.494061, 0.435908, 1)
+
+[node name="MainMenu3d" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.6, 0, 0, 0, 1, 0, 0, 0, 1.6, 0, 0, 0)
+mesh = ExtResource("1_sarr8")
+surface_material_override/0 = SubResource("StandardMaterial3D_da58o")
+surface_material_override/1 = SubResource("StandardMaterial3D_3nbi1")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.144109, -0.172862, 0.974347, 0.0206612, 0.983884, 0.17761, -0.989346, 0.0457263, -0.138215, 1.74716, 1.67085, -0.297926)
+script = ExtResource("2_j4xoy")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_qew33")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Mainmenu" parent="CanvasLayer" instance=ExtResource("4_oslj0")]
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(-0.972929, 0, 0.231103, 0, 1, 0, -0.231103, 0, -0.972929, 1.56686, 1.60984, -0.0648319)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(0.08, 0, -2.32831e-10, 0, 0.08, 0, 2.32831e-10, 0, 0.08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_sybpo")
+skeleton = NodePath("../..")
+
+[node name="eye" type="MeshInstance3D" parent="Node3D/MeshInstance3D"]
+transform = Transform3D(0.299944, 0, 0.00577494, 0, 0.3, 0, -0.00577494, 0, 0.299944, -0.147676, 0.602333, 0.471602)
+mesh = SubResource("SphereMesh_3bg6u")
+
+[node name="eye2" type="MeshInstance3D" parent="Node3D/MeshInstance3D"]
+transform = Transform3D(0.299944, 0, 0.00577494, 0, 0.3, 0, -0.00577494, 0, 0.299944, 0.16263, 0.602333, 0.471602)
+mesh = SubResource("SphereMesh_3bg6u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/MeshInstance3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.161497, 0.621762, 0.594158)
+mesh = SubResource("SphereMesh_y461l")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D/MeshInstance3D"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.151797, 0.621762, 0.594158)
+mesh = SubResource("SphereMesh_y461l")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D/MeshInstance3D"]
+transform = Transform3D(0.5, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.00964823, 0.792658, 0.403286)
+mesh = SubResource("SphereMesh_y461l")
+
+[node name="bluegloves" type="Node3D" parent="Node3D"]
+transform = Transform3D(0.999977, 0.00689627, -0.000100121, -0.00689627, 0.999555, -0.0290329, -0.000100121, 0.0290329, 0.999578, 0.00614166, -0.0035696, 0.025856)
+
+[node name="BoxingGlove" type="MeshInstance3D" parent="Node3D/bluegloves"]
+transform = Transform3D(-0.0479968, -8.92477e-05, 0.000544807, 0.000552069, -0.00775894, 0.0473655, -2.79397e-09, 0.0473686, 0.00775946, 0.0442915, 0.00882971, 0.0263822)
+mesh = ExtResource("6_60lsm")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_dw5hq")
+surface_material_override/1 = SubResource("StandardMaterial3D_0lju1")
+
+[node name="BoxingGlove2" type="MeshInstance3D" parent="Node3D/bluegloves"]
+transform = Transform3D(0.0292758, 0.00913648, -0.036925, -0.0380258, 0.00823616, -0.0281106, 0.00098516, 0.0463971, 0.0122613, -0.0460202, 0.00882971, 0.0263822)
+mesh = ExtResource("6_60lsm")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_dw5hq")
+surface_material_override/1 = SubResource("StandardMaterial3D_0lju1")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.51489, 0.287955, 0)
+light_energy = 4.151
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 1.69
+light_size = 1.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.51489, 3.45942, 0)
+light_energy = 4.151
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 1.69
+light_size = 1.0
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0759965, 0, 0.0249908, 0, 0.08, 0, -0.0249908, 0, 0.0759965, 1.50083, 1.60885, -0.492097)
+mesh = SubResource("CapsuleMesh_kag4e")
+
+[node name="eye" type="MeshInstance3D" parent="MeshInstance3D2"]
+transform = Transform3D(0.299944, 0, 0.00577494, 0, 0.3, 0, -0.00577494, 0, 0.299944, -0.147676, 0.602333, 0.471602)
+mesh = SubResource("SphereMesh_tcunc")
+skeleton = NodePath("../../MeshInstance3D2")
+
+[node name="eye2" type="MeshInstance3D" parent="MeshInstance3D2"]
+transform = Transform3D(0.299944, 0, 0.00577494, 0, 0.3, 0, -0.00577494, 0, 0.299944, 0.16263, 0.602333, 0.471602)
+mesh = SubResource("SphereMesh_tcunc")
+skeleton = NodePath("../../MeshInstance3D2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D2"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.161497, 0.621762, 0.594158)
+mesh = SubResource("SphereMesh_dglt4")
+skeleton = NodePath("../../MeshInstance3D2")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D2"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.151797, 0.621762, 0.594158)
+mesh = SubResource("SphereMesh_dglt4")
+skeleton = NodePath("../../MeshInstance3D2")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D2"]
+transform = Transform3D(0.5, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.00964823, 0.792658, 0.403286)
+mesh = SubResource("SphereMesh_dglt4")
+skeleton = NodePath("../../MeshInstance3D2")
+
+[node name="redgloves" type="Node3D" parent="MeshInstance3D2"]
+transform = Transform3D(1, 0, -2.98023e-08, 0, 1, 0, 2.98023e-08, 0, 1, 0.0128746, -0.150892, -0.095994)
+
+[node name="BoxingGlove" type="MeshInstance3D" parent="MeshInstance3D2/redgloves"]
+transform = Transform3D(-0.59996, -0.0011156, 0.00681009, 0.00690086, -0.0969868, 0.592069, -3.57628e-08, 0.592108, 0.0969932, 0.553644, 0.110371, 0.329778)
+mesh = ExtResource("6_60lsm")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_onyje")
+surface_material_override/1 = SubResource("StandardMaterial3D_s5oly")
+
+[node name="BoxingGlove2" type="MeshInstance3D" parent="MeshInstance3D2/redgloves"]
+transform = Transform3D(0.365948, 0.114206, -0.461562, -0.475322, 0.102952, -0.351383, 0.0123145, 0.579964, 0.153266, -0.575253, 0.110371, 0.329778)
+mesh = ExtResource("6_60lsm")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_onyje")
+surface_material_override/1 = SubResource("StandardMaterial3D_s5oly")
+
+[node name="CountdownLabel" type="Label" parent="."]
+anchors_preset = -1
+anchor_left = 0.361
+anchor_top = 0.02
+anchor_right = 0.665
+anchor_bottom = 0.085
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.0985688, 0.796185, 0.459305, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 25
+theme_override_fonts/font = ExtResource("6_yh1x1")
+theme_override_font_sizes/font_size = 100
+text = "Type Fight!"
+horizontal_alignment = 1
+
+[node name="CountdownLabel2" type="Label" parent="."]
+anchors_preset = -1
+anchor_left = 0.361
+anchor_top = 0.171
+anchor_right = 0.665
+anchor_bottom = 0.206
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.0985688, 0.796185, 0.459305, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 25
+theme_override_fonts/font = ExtResource("6_yh1x1")
+theme_override_font_sizes/font_size = 20
+text = "(alpha only local co-op)"
+horizontal_alignment = 1

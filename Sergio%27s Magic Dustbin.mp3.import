@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://ck166vdjhgy0w"
+path="res://.godot/imported/Sergio%27s Magic Dustbin.mp3-aecb68ca1407e480b7a55dad45a05536.mp3str"
+
+[deps]
+
+source_file="res://Sergio%27s Magic Dustbin.mp3"
+dest_files=["res://.godot/imported/Sergio%27s Magic Dustbin.mp3-aecb68ca1407e480b7a55dad45a05536.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

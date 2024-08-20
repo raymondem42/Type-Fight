@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://bf88svfy3qt0l"]
+[gd_scene load_steps=6 format=3 uid="uid://bf88svfy3qt0l"]
 
 [ext_resource type="Script" path="res://SceneLoader.gd" id="1_hap7d"]
+[ext_resource type="FontFile" uid="uid://d4lesys1l61oe" path="res://AlfaSlabOne-Regular.ttf" id="2_fowu2"]
+[ext_resource type="AudioStream" uid="uid://b834jejhw0n70" path="res://Cloud Dancer.mp3" id="3_dg50w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oikf0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kc76v"]
 
 [node name="Mainmenu" type="Control"]
 layout_mode = 3
@@ -12,21 +18,41 @@ grow_vertical = 2
 script = ExtResource("1_hap7d")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 309.0
-offset_right = 1149.0
-offset_bottom = 622.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 alignment = 1
 
 [node name="SinglePlayer" type="Button" parent="VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "Single Player"
 
 [node name="Versus" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-text = "Versus"
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(0.641414, 0.98425, 0.671869, 1)
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_oikf0")
+text = "Play Versus mode"
+icon_alignment = 1
 
 [node name="Exit" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.643137, 0.984314, 0.670588, 1)
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_kc76v")
 text = "Exit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="VBoxContainer"]
+stream = ExtResource("3_dg50w")
+volume_db = -16.0
+autoplay = true
+parameters/looping = true

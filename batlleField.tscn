@@ -1,10 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://wt2v21gt8u5"]
+[gd_scene load_steps=16 format=3 uid="uid://wt2v21gt8u5"]
 
 [ext_resource type="Script" path="res://batlle_field.gd" id="1_bfbwb"]
 [ext_resource type="ArrayMesh" uid="uid://bs8n588tbhk6y" path="res://Island03.obj" id="1_uvqsy"]
 [ext_resource type="PackedScene" uid="uid://c5qmq18y0x3rt" path="res://WordInput.tscn" id="2_t5gcl"]
 [ext_resource type="Texture2D" uid="uid://btcajir0tvimh" path="res://rainbow_up.png" id="3_155b0"]
+[ext_resource type="Script" path="res://orbiting.gd" id="3_l7hmi"]
+[ext_resource type="Script" path="res://camera_3d.gd" id="3_xikys"]
 [ext_resource type="Script" path="res://cental_force.gd" id="5_l0vfy"]
+[ext_resource type="AudioStream" uid="uid://ck166vdjhgy0w" path="res://Sergio%27s Magic Dustbin.mp3" id="8_26smq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wpet6"]
 albedo_color = Color(0.291554, 0.0950458, 0.00697745, 1)
@@ -13,20 +16,24 @@ albedo_color = Color(0.291554, 0.0950458, 0.00697745, 1)
 albedo_color = Color(8.66354e-07, 0.430139, 0.0761411, 1)
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lyv1t"]
+height = 0.01
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_e73t2"]
 panorama = ExtResource("3_155b0")
 
-[sub_resource type="Sky" id="Sky_7hc01"]
+[sub_resource type="Sky" id="Sky_0bmcq"]
 sky_material = SubResource("PanoramaSkyMaterial_e73t2")
 
 [sub_resource type="Environment" id="Environment_m7o0q"]
 background_mode = 2
 background_energy_multiplier = 1.94
-sky = SubResource("Sky_7hc01")
+sky = SubResource("Sky_0bmcq")
 ambient_light_source = 3
 ambient_light_color = Color(8.66354e-07, 0.596559, 0.758849, 1)
 reflected_light_source = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q07tm"]
+size = Vector3(50, 0.5, 5)
 
 [node name="BattleField" type="Node3D"]
 script = ExtResource("1_bfbwb")
@@ -38,17 +45,25 @@ surface_material_override/0 = SubResource("StandardMaterial3D_wpet6")
 surface_material_override/1 = SubResource("StandardMaterial3D_nnpp3")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
-transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0.00447917, 0)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 1.39689, 0)
 shape = SubResource("CylinderShape3D_lyv1t")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.144314, -0.433092, 0.889722, -0.0191761, 0.900189, 0.435077, -0.989346, 0.0457262, -0.138215, 2.09831, 2.02547, -0.297926)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" parent="CanvasLayer" instance=ExtResource("2_t5gcl")]
+anchors_preset = 15
+
+[node name="Orbiting" type="Node3D" parent="CanvasLayer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21977, 0)
+script = ExtResource("3_l7hmi")
+
+[node name="Camera3D" type="Camera3D" parent="CanvasLayer/Orbiting"]
+transform = Transform3D(-0.144314, -0.433092, 0.889722, -0.0191761, 0.900189, 0.435077, -0.989346, 0.0457263, -0.138215, 1.41902, 0.466699, -0.297926)
+script = ExtResource("3_xikys")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.30374, 0)
@@ -72,3 +87,36 @@ environment = SubResource("Environment_m7o0q")
 [node name="Node3D" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42042, 0)
 script = ExtResource("5_l0vfy")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.980878, -0.0666062)
+collision_layer = 3
+collision_mask = 3
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.99995, -0.0100006, 0, -0.000449297, -0.0449248, -0.99899, 0.00999047, 0.99894, -0.0449271, 0, 0.317331, -1.31984)
+shape = SubResource("BoxShape3D_q07tm")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.99995, -0.0100006, 0, -0.000449297, -0.0449249, -0.99899, 0.00999047, 0.998941, -0.0449271, 0, 0.317331, 1.27324)
+shape = SubResource("BoxShape3D_q07tm")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(-0.0135856, -0.998898, 0.0449268, -0.000449333, -0.0449249, -0.99899, 0.999909, -0.0135921, 0.000161543, 1.04564, 0.317332, 1.72803)
+shape = SubResource("BoxShape3D_q07tm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.99995, -0.0100006, 0, 0.0100006, 0.99995, 0, 0, 0, 1, 0, 1.65541, -0.309624)
+shape = SubResource("BoxShape3D_q07tm")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(0.99995, -0.0100006, 0, 0.0100006, 0.99995, 0, 0, 0, 1, 0, 0.0684855, -0.309624)
+shape = SubResource("BoxShape3D_q07tm")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_26smq")
+volume_db = -16.0
+autoplay = true
+parameters/looping = true
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
