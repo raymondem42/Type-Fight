@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c5qmq18y0x3rt"]
+[gd_scene load_steps=6 format=3 uid="uid://c5qmq18y0x3rt"]
 
 [ext_resource type="Script" path="res://ChracterCounter.gd" id="1_l8hxm"]
 [ext_resource type="FontFile" uid="uid://d4lesys1l61oe" path="res://AlfaSlabOne-Regular.ttf" id="2_4t3oo"]
+[ext_resource type="AudioStream" uid="uid://dao2iu8fny10o" path="res://518104__se2001__cartoon-falling-whistle.wav" id="3_pshvx"]
+[ext_resource type="AudioStream" uid="uid://chocqio28jmk" path="res://480786__craigsmith__r07-44-group-of-men-at-a-fight.wav" id="4_jqdof"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_gf4wr"]
 
@@ -145,6 +147,15 @@ theme_override_colors/font_outline_color = Color(0.920995, 0.920995, 0.920995, 1
 theme_override_constants/outline_size = 25
 theme_override_fonts/font = ExtResource("2_4t3oo")
 theme_override_font_sizes/font_size = 75
+
+[node name="AudioStreamPlayerFalling" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_pshvx")
+volume_db = -35.429
+pitch_scale = 2.0
+
+[node name="AudioStreamPlayerFighting" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_jqdof")
+volume_db = -14.251
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="text_submitted" from="LineEdit" to="." method="_on_LineEdit_text_submitted"]

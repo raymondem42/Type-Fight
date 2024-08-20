@@ -62,7 +62,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.21977, 0)
 script = ExtResource("3_l7hmi")
 
 [node name="Camera3D" type="Camera3D" parent="CanvasLayer/Orbiting"]
-transform = Transform3D(-0.144314, -0.433092, 0.889722, -0.0191761, 0.900189, 0.435077, -0.989346, 0.0457263, -0.138215, 1.41902, 0.466699, -0.297926)
+transform = Transform3D(-0.144314, -0.433092, 0.889722, -0.0191761, 0.900189, 0.435077, -0.989346, 0.0457263, -0.138215, 1.48929, 0.507888, -0.297926)
 script = ExtResource("3_xikys")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]

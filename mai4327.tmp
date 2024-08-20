@@ -1,0 +1,129 @@
+[gd_scene load_steps=6 format=3 uid="uid://bf88svfy3qt0l"]
+
+[ext_resource type="Script" path="res://SceneLoader.gd" id="1_hap7d"]
+[ext_resource type="FontFile" uid="uid://d4lesys1l61oe" path="res://AlfaSlabOne-Regular.ttf" id="2_fowu2"]
+[ext_resource type="AudioStream" uid="uid://b834jejhw0n70" path="res://Cloud Dancer.mp3" id="3_dg50w"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oikf0"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uscno"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[node name="Mainmenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hap7d")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="SinglePlayer" type="Button" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Single Player"
+
+[node name="Versus" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(0.641414, 0.98425, 0.671869, 1)
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_oikf0")
+text = "Play Versus Mode"
+icon_alignment = 1
+
+[node name="Credits" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_hover_color = Color(0.641414, 0.98425, 0.671869, 1)
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_oikf0")
+text = "Credits
+"
+icon_alignment = 1
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.643137, 0.984314, 0.670588, 1)
+theme_override_colors/icon_hover_color = Color(0.284068, 0.823359, 0.388751, 1)
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxEmpty_uscno")
+text = "Exit"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="VBoxContainer"]
+stream = ExtResource("3_dg50w")
+volume_db = -16.0
+autoplay = true
+parameters/looping = true
+
+[node name="Popup" type="Popup" parent="."]
+auto_translate_mode = 1
+size = Vector2i(1044, 480)
+visible = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Credit" type="Label" parent="Popup/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 15
+text = "Developers: Raymond & Hillary Maldonado"
+
+[node name="Credit2" type="Label" parent="Popup/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 15
+text = "
+\"Cloud Dancer \" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+"
+
+[node name="Credit3" type="Label" parent="Popup/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 15
+text = "
+\"Sergio's Magic Dustbin \" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+"
+
+[node name="Credit4" type="Label" parent="Popup/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_fowu2")
+theme_override_font_sizes/font_size = 15
+text = "Cartoon Falling Whistle by se2001 -- https://freesound.org/s/518104/ -- License: Creative Commons 0
+
+R07-44-Group of Men at a Fight.wav by craigsmith -- https://freesound.org/s/480786/ -- License: Creative Commons 0
+
+Skybox: https://opengameart.org/node/36622
+
+Large Island by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/jLjH1jMIpH)
+
+Boxing Glove by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/35PCBHLrd4)
+
+Game cover art: https://www.fiverr.com/rolly96/"

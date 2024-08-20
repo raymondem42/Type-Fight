@@ -55,9 +55,9 @@ func detect_and_attack_enemies():
 			attack(enemy)
 
 func attack(enemy):
-	var attack_direction = (enemy.global_transform.origin - global_transform.origin).normalized()
-	enemy.apply_central_impulse(attack_direction * attack_force * 65)
 	anim_player.play("bluePunch")
+	var attack_direction = (enemy.global_transform.origin - global_transform.origin).normalized()
+	enemy.apply_central_impulse(attack_direction * attack_force * 80)
 	await get_tree().create_timer(1.5).timeout
 	
 func set_variable(value):

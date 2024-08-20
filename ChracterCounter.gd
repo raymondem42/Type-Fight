@@ -16,6 +16,9 @@ extends Control
 @onready var central_force = preload("res://cental_force.gd")
 
 
+@onready var fallsound = $AudioStreamPlayerFalling
+@onready var fightsound = $AudioStreamPlayerFighting
+
 @onready var timer = $Timer
 @onready var countdown_label = $CountdownLabel  # A label to display the countdown timer
 @onready var text_input =  $LineEdit #user enter words
@@ -30,7 +33,7 @@ var team = 0
 
 var TheRedBeans = []
 var TheBlueBeans = []
-
+var usedwords = []
 var beanSpawnAmountP1 = 0
 var beanSpawnAmountP2 = 0
 
@@ -346,10 +349,19 @@ func _on_LineEdit_text_submitted(new_text: String) -> void:
 	
 	if(new_text == ""):
 		return
-		
+	
+	if(new_text in usedwords):
+		result_label.text = "No reusing old words!"
+		text_input.clear() #clears the input for retry
+		text_input.grab_focus()
+		allow_enter = true
+		text_input.editable =true
+		return
+	
 	if prompt_function(new_text):
 		allow_enter = false
 		text_input.editable = false
+		usedwords.append(new_text)
 		
 		var char_count = new_text.length()
 		#print(char_count)
@@ -552,6 +564,7 @@ func spawn_beans(count, team):
 			blueBean.rotation_degrees.y = 180  # Flip to face the other way
 			add_child(blueBean)
 			TheBlueBeans.append(Blue_rigid_body)
+	fallsound.play()
 			
 func modify_beans():
 	for bean in TheRedBeans:
@@ -560,6 +573,7 @@ func modify_beans():
 	for bean in TheBlueBeans:
 		#var beans_script = bean.get_script()
 		bean.set_variable(2)
+	fightsound.play()
 	result_label.visible = false
 	prompt_label.visible = false
 	text_input.visible = false
